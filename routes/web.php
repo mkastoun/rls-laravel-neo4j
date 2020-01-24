@@ -23,10 +23,11 @@ Route::group([
 });
 
 Route::resource('team', 'TeamController');
+Route::get('employee/{employeeUuid}', 'EmployeeController@show');
 Route::group([
     'prefix' => 'team/{teamUuid}/employee'
 ], function () {
-    Route::resource('/', 'EmployeeController');
+    Route::post('/', 'EmployeeController@store');
 });
 
 Route::resource('access-level', 'AccessLevelController');

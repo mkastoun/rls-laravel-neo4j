@@ -4,7 +4,9 @@
 namespace App\Http\Services;
 
 
+use App\Models\AccessLevel;
 use App\Models\Employee;
+use App\Models\Item;
 use App\Models\Team;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
@@ -51,5 +53,14 @@ class EmployeeService
         $employee = Employee::query()->where('uuid', '=', $employeeUuid)->first();
         $team = Team::query()->where('uuid', '=', $teamUuid)->first();
         $employee->team()->save($team);
+    }
+
+    public function getEmployeeAccessableItem(string $employeeUuid)
+    {
+        $employee = Employee::query()->where('uuid', '=', $employeeUuid)->first();
+        $accessUuid = $employee->access->uuid;
+        $access = AccessLevel::query()->where('uuid', '=', $accessUuid)->first();
+        $t = $access->items();
+        var_dump($access);exit;
     }
 }

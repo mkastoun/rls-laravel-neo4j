@@ -1,8 +1,6 @@
 <?php
 
-
 namespace App\Http\Services;
-
 
 use App\Models\AccessLevel;
 use App\Models\Employee;
@@ -26,12 +24,25 @@ class AccessLevelService
         $this->uuid = Str::uuid();
     }
 
+    /**
+     * Function responsible to create new access
+     *
+     * @param  array  $accessLevelDetails  Access details
+     *
+     * @return \Illuminate\Database\Eloquent\Builder|\Illuminate\Database\Eloquent\Model
+     */
     public function createAccessLevel(array $accessLevelDetails)
     {
         $accessLevelDetails['uuid'] = $this->uuid;
         return AccessLevel::query()->create($accessLevelDetails);
     }
 
+    /**
+     * Assign employee to an access
+     *
+     * @param  string  $accessUuid    Access Uuid
+     * @param  string  $employeeUuid  Employee Uuid
+     */
     public function assignAccessToEmployee(string $accessUuid, string $employeeUuid)
     {
         $employee = Employee::query()->where('uuid', '=', $employeeUuid)->first();
@@ -39,6 +50,12 @@ class AccessLevelService
         $employee->access()->save($accessLevel);
     }
 
+    /**
+     * Assign item to an access
+     *
+     * @param  string  $accessUuid  Access Uuid
+     * @param  string  $itemUuid    Item Uuid
+     */
     public function assignAccessToItem(string $accessUuid, string $itemUuid)
     {
         $item = Item::query()->where('uuid', '=', $itemUuid)->first();
@@ -46,6 +63,12 @@ class AccessLevelService
         $item->access()->save($accessLevel);
     }
 
+    /**
+     * Assign folder to access
+     *
+     * @param  string  $accessUuid  Access Uuid
+     * @param  string  $folderUuid  Folder Uuid
+     */
     public function assignAccessToFolder(string $accessUuid, string $folderUuid)
     {
         $folder = Folder::query()->where('uuid', '=', $folderUuid)->first();
@@ -53,6 +76,12 @@ class AccessLevelService
         $folder->access()->save($accessLevel);
     }
 
+    /**
+     * Assign team to access
+     *
+     * @param  string  $accessUuid  Access Uuid
+     * @param  string  $teamUuid    Team Uuid
+     */
     public function assignAccessToTeam(string $accessUuid, string $teamUuid)
     {
         $team = Team::query()->where('uuid', '=', $teamUuid)->first();
