@@ -29,8 +29,8 @@ class EmployeeService
     /**
      * Function responsible to create an employee
      *
-     * @param array  $employeeDetails Array contains employee details
-     * @param string $teamUuid        Team uuid
+     * @param array $employeeDetails Array contains employee details
+     * @param string $teamUuid Team uuid
      *
      * @return \Illuminate\Database\Eloquent\Builder|\Illuminate\Database\Eloquent\Model
      */
@@ -46,7 +46,7 @@ class EmployeeService
      * Function responsible to assign an Employee to a Team
      *
      * @param string $employeeUuid Employee Uuid
-     * @param string $teamUuid     Team Uuid
+     * @param string $teamUuid Team Uuid
      */
     public function assignEmployeeToTeam(string $employeeUuid, string $teamUuid)
     {
@@ -55,12 +55,24 @@ class EmployeeService
         $employee->team()->save($team);
     }
 
-    public function getEmployeeAccessableItem(string $employeeUuid)
+    /**
+     * Get items related to he employees access level
+     *
+     * @param string $employeeUuid Employee uuid
+     *
+     * @return mixed
+     */
+    public function getEmployeeAccessibleItem(string $employeeUuid)
     {
         $employee = Employee::query()->where('uuid', '=', $employeeUuid)->first();
-        $accessUuid = $employee->access->uuid;
-        $access = AccessLevel::query()->where('uuid', '=', $accessUuid)->first();
-        $t = $access->items();
-        var_dump($access);exit;
+        $teamUuid = $employee->team->uuid;
+        $employeeAccessUuid = $employee->access->uuid;
+        $access = AccessLevel::query()->where('uuid', '=', $employeeAccessUuid)->first();
+        $teamService = new TeamService();
+        $result['teamItems'] = (!empty($teamUuid))
+            ? $teamService->getEmployeeAccessibleItemsByTeam($teamUuid)
+            : [];
+        $result['employeeItems'] = $access->items->toArray();
+        return $result;
     }
 }

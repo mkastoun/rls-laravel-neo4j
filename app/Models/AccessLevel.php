@@ -28,7 +28,7 @@ class AccessLevel extends NeoEloquent
      *
      * @var array
      */
-    protected $fillable = ['uuid','name', 'level'];
+    protected $fillable = ['uuid', 'name', 'level'];
 
     /**
      * items linked to this acl
@@ -37,7 +37,8 @@ class AccessLevel extends NeoEloquent
      */
     public function items()
     {
-        return $this->hasMany('App\Models\Item');
+        return $this->belongsToMany('App\Models\Item', 'HAS_ACCESS_LEVEL', null,
+            null, 'uuid', null, null);
     }
 
     /**
@@ -47,7 +48,7 @@ class AccessLevel extends NeoEloquent
      */
     public function folders()
     {
-        return $this->hasMany('App\Models\Folder');
+        return $this->hasMany('App\Models\Folder', 'HAS_ACCESS_LEVEL');
     }
 
     /**
@@ -57,7 +58,13 @@ class AccessLevel extends NeoEloquent
      */
     public function teams()
     {
-        return $this->hasMany('App\Models\Team');
+        return $this->hasMany(
+            'App\Models\Team',
+            'HAS_ACCESS_LEVEL',
+            null,
+            null,
+            'uuid'
+        );
     }
 
     /**
@@ -67,7 +74,7 @@ class AccessLevel extends NeoEloquent
      */
     public function employees()
     {
-        return $this->hasMany('App\Models\Employee');
+        return $this->hasMany('App\Models\Employee', 'HAS_ACCESS_LEVEL');
     }
 
 }

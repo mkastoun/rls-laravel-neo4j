@@ -57,3 +57,10 @@ Route::group([
     Route::resource('/', 'AccessTeamController');
 });
 
+Route::group([
+    'prefix' => 'admin'
+], function () {
+    Route::get('/employee', 'FrontEndController@index');
+    Route::get('/team', 'FrontEndController@create');
+});
+

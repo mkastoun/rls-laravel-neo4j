@@ -47,7 +47,13 @@ class EmployeeController extends Controller
      */
     public function show(string $employeeUuid)
     {
-        $this->employeeService->getEmployeeAccessableItem($employeeUuid);
+        return response()->json(
+            [
+                'success' => true,
+                'message' => 'List of item accessible by employee',
+                'data' => $this->employeeService->getEmployeeAccessibleItem($employeeUuid)
+            ]
+        );
     }
 
     /**
