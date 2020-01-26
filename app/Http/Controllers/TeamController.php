@@ -2,6 +2,7 @@
 
     namespace App\Http\Controllers;
 
+    use App\Http\Services\AccessLevelService;
     use App\Http\Services\TeamService;
     use Illuminate\Http\Request;
     use Illuminate\Http\Response;
@@ -9,10 +10,12 @@
     class TeamController extends Controller
     {
         protected $teamService;
+        protected $accessLevelService;
 
-        public function __construct(TeamService $teamService)
+        public function __construct(TeamService $teamService, AccessLevelService $accessLevelService)
         {
             $this->teamService = $teamService;
+            $this->accessLevelService = $accessLevelService;
         }
 
         /**
@@ -53,9 +56,13 @@
          *
          * @return Response
          */
-        public function show($id)
+        public function show(string $teamUuid)
         {
-            //
+            return response()->json([
+            'success' => true,
+            'message' => 'team details',
+            'data' => $this->teamService->teamDetails($teamUuid)
+        ]);
         }
 
         /**
@@ -82,4 +89,62 @@
         {
             //
         }
+
+        /**
+         * Controller to get list of employees
+         *
+         * @param string $teamUuid  Team Uuid
+         *
+         * @return \Illuminate\Http\JsonResponse
+         */
+        public function employees(string $teamUuid)
+        {
+            return response()->json([
+                'success' => true,
+                'message' => 'List of employees',
+                'data' => $this->teamService->teamEmployee($teamUuid)
+            ]);
+        }
+
+        /**
+         * Controller to get list of folders accessible by the team
+         *
+         * @param string $teamUuid  Team Uuid
+         *
+         * @return \Illuminate\Http\JsonResponse
+         */
+        public function folders(string $teamUuid)
+        {
+            return response()->json([
+                'success' => true,
+                'message' => 'List of folders',
+                'data' => $this->teamService->getTeamAccessibleFolders($teamUuid)
+            ]);
+        }
+
+        /**
+         * Controller to get list accessible item by the team
+         *
+         * @param string $teamUuid  Team Uuid
+         *
+         * @return \Illuminate\Http\JsonResponse
+         */
+        public function items(string $teamUuid)
+        {
+            return response()->json([
+                'success' => true,
+                'message' => 'List of items',
+                'data' => $this->teamService->getTeamAccessibleItems($teamUuid)
+            ]);
+        }
+
+        public function access(string $teamUuid)
+        {
+            return response()->json([
+                'success' => true,
+                'message' => 'Team access level',
+                'data' => $this->accessLevelService->teamAccessLevel($teamUuid)
+            ]);
+        }
+
     }

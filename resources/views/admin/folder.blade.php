@@ -11,7 +11,7 @@
             <div class="card shadow mb-4">
                 <!-- Card Header - Dropdown -->
                 <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                    <h6 class="m-0 font-weight-bold text-primary">Team</h6>
+                    <h6 class="m-0 font-weight-bold text-primary">Folder</h6>
                     <div class="dropdown no-arrow">
                         <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown"
                            aria-haspopup="true" aria-expanded="false">
@@ -21,10 +21,13 @@
                 </div>
                 <!-- Card Body -->
                 <div class="card-body">
-                    <form class="form-group" id="teamForm">
-                        <label for="teamName">Team Name</label>
-                        <input type="text" class="form-control" name="name" id="teamName"
-                               placeholder="John Doe">
+                    <form class="form-group" id="folderForm">
+                        <label for="folderName">Folder Name</label>
+                        <input type="text" class="form-control" name="name" id="folderName"
+                               placeholder="Folder name">
+                        <label for="folderDescription">Folder Description</label>
+                        <input type="text" class="form-control" name="description" id="folderDescription"
+                               placeholder="Folder name">
                         {{ csrf_field() }}
                         <br/>
                         <input type="submit" id="addButton" class="btn btn-primary"/>
@@ -38,20 +41,22 @@
 
     <div class="card shadow mb-4">
         <div class="card-header py-3">
-            <h6 class="m-0 font-weight-bold text-primary">Team List</h6>
+            <h6 class="m-0 font-weight-bold text-primary">Folder Items</h6>
         </div>
         <div class="card-body">
             <div class="table-responsive">
                 <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                     <thead>
                     <tr>
-                        <th>Team Name</th>
+                        <th>Folder Name</th>
+                        <th>Folder Description</th>
                         <th>Last Updated Date</th>
                     </tr>
                     </thead>
                     <tfoot>
                     <tr>
-                        <th>Team Name</th>
+                        <th>Folder Name</th>
+                        <th>Folder Description</th>
                         <th>Last Updated Date</th>
                     </tr>
                     </tfoot>
@@ -74,19 +79,19 @@
         @stop
         @section('javascript_naive')
             <script>
-                $('#teamForm').submit(function (e) {
-                    var postData = $('#teamForm').serialize();
+                $('#folderForm').submit(function (e) {
+                    var postData = $('#folderForm').serialize();
                     /* start ajax submission process */
                     console.log(postData);
                     $.ajax({
-                        url: '{{ url('/team') }}',
+                        url: '{{ url('/folder') }}',
                         type: "POST",
                         data: postData,
                         success: function (data, textStatus, jqXHR) {
                             $('#dataTable').DataTable().ajax.reload();
                             $.toast({
                                 heading: 'Success',
-                                text: 'Team stored successfully',
+                                text: 'Folder stored successfully',
                                 showHideTransition: 'slide',
                                 icon: 'success'
                             })
@@ -106,16 +111,17 @@
                         "serverSide": true,
                         "paging": false,
                         "dataSrc": "data",
-                        "ajax": '{{ url('/team') }}',
+                        "ajax": '{{ url('/folder') }}',
                         "columnDefs": [{
                             "targets": 0,
                             "render": function ( data, type, row, meta ) {
                                 var itemID = row['uuid'];
-                                return '<a href="team/' + itemID + '/details">' + data + '</a>';
+                                return '<a href="/admin/folder/' + itemID + '/details">' + data + '</a>';
                             }
                         }],
                         "columns": [
                             {"data": "name"},
+                            {"data": "description"},
                             {"data": "updated_at"}
                         ]
                     });

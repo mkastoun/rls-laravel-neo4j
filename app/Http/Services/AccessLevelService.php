@@ -88,4 +88,31 @@ class AccessLevelService
         $accessLevel = AccessLevel::query()->where('uuid', '=', $accessUuid)->first();
         $team->access()->save($accessLevel);
     }
+
+    /**
+     * Get team access level
+     *
+     * @param string $teamUuid  Team uuid
+     *
+     * @return array
+     */
+    public function teamAccessLevel(string $teamUuid)
+    {
+        $team = Team::query()->where('uuid', '=', $teamUuid)->first();
+        return (!empty($team->access)) ? $team->access->toArray() : [];
+    }
+
+    /**
+     * Get folder access level
+     *
+     * @param string $teamUuid  Team uuid
+     *
+     * @return array
+     */
+    public function folderAccessLevel(string $teamUuid)
+    {
+        $team = Folder::query()->where('uuid', '=', $teamUuid)->first();
+        return (!empty($team->access)) ? $team->access->toArray() : [];
+    }
+    
 }

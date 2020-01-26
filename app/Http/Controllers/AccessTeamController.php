@@ -38,10 +38,11 @@ class AccessTeamController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param string $teamUuid Team Uuid
+     *
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(string $teamUuid)
     {
         //
     }

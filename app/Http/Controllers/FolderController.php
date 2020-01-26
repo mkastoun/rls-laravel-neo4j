@@ -2,16 +2,19 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Services\AccessLevelService;
 use App\Http\Services\FolderService;
 use Illuminate\Http\Request;
 
 class FolderController extends Controller
 {
     protected $folderService;
+    protected $accessLevelService;
 
-    public function __construct(FolderService $folderService)
+    public function __construct(FolderService $folderService, AccessLevelService $accessLevelService)
     {
         $this->folderService = $folderService;
+        $this->accessLevelService = $accessLevelService;
     }
     /**
      * Display a listing of the resource.
@@ -20,6 +23,13 @@ class FolderController extends Controller
      */
     public function index()
     {
+        return response()->json(
+            [
+                'success' => true,
+                'message' => 'Folder stored successfully',
+                'data' => $this->folderService->folders()->toArray()
+            ]
+        );
     }
 
     /**
@@ -45,9 +55,15 @@ class FolderController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(string $folderUuid)
     {
-        //
+        return response()->json(
+            [
+                'success' => true,
+                'message' => 'Folder Information',
+                'data' => $this->folderService->folderDetails($folderUuid)
+            ]
+        );
     }
 
     /**
@@ -71,5 +87,27 @@ class FolderController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    public function access(string $folderUuid)
+    {
+        return response()->json(
+            [
+                'success' => true,
+                'message' => 'Folder access information',
+                'data' => $this->accessLevelService->folderAccessLevel($folderUuid)
+            ]
+        );
+    }
+
+    public function items(string $folderUuid)
+    {
+        return response()->json(
+            [
+                'success' => true,
+                'message' => 'Folder items',
+                'data' => $this->folderService->items($folderUuid)
+            ]
+        );
     }
 }
