@@ -1,0 +1,60 @@
+version: '2'
+
+services:
+
+  #PHP Service
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: digitalocean.com/php
+    container_name: app
+    tty: true
+    environment:
+      SERVICE_NAME: app
+      SERVICE_TAGS: dev
+    working_dir: /var/www
+    volumes:
+      - ./:/var/www
+      - ./php/local.ini:/usr/local/etc/php/conf.d/local.ini
+    networks:
+      - app-network
+
+  ### PHP-FPM Container #######################################
+
+  #Nginx Service
+  webserver:
+    image: nginx:alpine
+    container_name: webserver
+    tty: true
+    ports:
+      - "8014:8014"
+      - "444:444"
+    volumes:
+      - ./:/var/www
+      - ./nginx/conf.d/:/etc/nginx/conf.d/
+    networks:
+      - app-network
+
+
+  ### Neo4j Container #########################################
+
+  neo4j:
+    build: ./docker/neo4j
+    ports:
+      - "7474:7474"
+      - "1337:1337"
+    environment:
+      - NEO4J_AUTH=neo4j:123456
+    volumes_from:
+      - volumes_data
+  ### Databases Data Container ################################
+
+  volumes_data:
+    build: ./docker/volumes/data
+    volumes:
+      - ./data/neo4j:/var/lib/neo4j/data
+
+networks:
+  app-network:
+    driver: bridge

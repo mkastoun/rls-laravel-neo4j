@@ -1,0 +1,13 @@
+version: '2'
+services:
+  v2-web-gateway:
+    image: rls/gateway
+    links:
+    - api
+  api:
+    image: rls/api
+    volumes:
+    - .:/var/www/rls
+    depends_on:
+    - v2-test-db
+    command: ["sh", "./docker/run-ci.sh"]
