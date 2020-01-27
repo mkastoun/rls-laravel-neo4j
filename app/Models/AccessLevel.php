@@ -76,7 +76,14 @@
          */
         public function employees()
         {
-            return $this->hasMany('App\Models\Employee', 'HAS_ACCESS_LEVEL');
+            return $this->belongsToMany(
+                'App\Models\Employee',
+                'HAS_ACCESS_LEVEL',
+                null,
+                null,
+                'uuid',
+                null,
+                null);
         }
 
     }

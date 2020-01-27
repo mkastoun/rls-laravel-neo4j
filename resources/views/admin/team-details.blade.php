@@ -177,6 +177,7 @@
                         data: postData,
                         success: function (data, textStatus, jqXHR) {
                             $('#dataTable').DataTable().ajax.reload();
+                            $('#employeeForm').trigger("reset");
                             $.toast({
                                 heading: 'Success',
                                 text: 'Team stored successfully',

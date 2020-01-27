@@ -3,7 +3,7 @@
 @section('content')
     <!-- Page Heading -->
     <div class="d-sm-flex align-items-center justify-content-between mb-4">
-        <h1 class="h3 mb-0 text-gray-800">Team</h1>
+        <h1 class="h3 mb-0 text-gray-800">Access Level</h1>
     </div>
     <div class="row">
         <!-- Area Chart -->
@@ -11,7 +11,7 @@
             <div class="card shadow mb-4">
                 <!-- Card Header - Dropdown -->
                 <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                    <h6 class="m-0 font-weight-bold text-primary">Team</h6>
+                    <h6 class="m-0 font-weight-bold text-primary">Create Access</h6>
                     <div class="dropdown no-arrow">
                         <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown"
                            aria-haspopup="true" aria-expanded="false">
@@ -21,10 +21,13 @@
                 </div>
                 <!-- Card Body -->
                 <div class="card-body">
-                    <form class="form-group" id="teamForm">
-                        <label for="teamName">Team Name</label>
-                        <input type="text" class="form-control" name="name" id="teamName"
-                               placeholder="John Doe">
+                    <form class="form-group" id="accessForm">
+                        <label for="accessName">Access Name</label>
+                        <input type="text" class="form-control" name="name" id="accessName"
+                               placeholder="Access Name">
+                        <label for="accessLevel">Access Level</label>
+                        <input type="number" class="form-control" name="level" id="accessLevel"
+                               placeholder="Access Level">
                         {{ csrf_field() }}
                         <br/>
                         <input type="submit" id="addButton" class="btn btn-primary"/>
@@ -38,20 +41,22 @@
 
     <div class="card shadow mb-4">
         <div class="card-header py-3">
-            <h6 class="m-0 font-weight-bold text-primary">Team List</h6>
+            <h6 class="m-0 font-weight-bold text-primary">Access List</h6>
         </div>
         <div class="card-body">
             <div class="table-responsive">
                 <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                     <thead>
                     <tr>
-                        <th>Team Name</th>
+                        <th>Access Name</th>
+                        <th>Access Level</th>
                         <th>Last Updated Date</th>
                     </tr>
                     </thead>
                     <tfoot>
                     <tr>
-                        <th>Team Name</th>
+                        <th>Access Name</th>
+                        <th>Access Level</th>
                         <th>Last Updated Date</th>
                     </tr>
                     </tfoot>
@@ -61,6 +66,7 @@
                 </table>
             </div>
         </div>
+        </div>
 
         <!-- Content Row -->
         @stop
@@ -68,26 +74,22 @@
             {{--            <script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>--}}
             <script src="{{ asset('vendor/datatables/jquery.dataTables.min.js') }}"></script>
             <script src="{{ asset('vendor/datatables/dataTables.bootstrap4.min.js') }}"></script>
-
-            <!-- Page level custom scripts -->
-            {{--            <script src="{{ asset('js/demo/datatables-demo.js') }}"></script>--}}
         @stop
         @section('javascript_naive')
             <script>
-                $('#teamForm').submit(function (e) {
-                    var postData = $('#teamForm').serialize();
+                $('#accessForm').submit(function (e) {
+                    var postData = $('#accessForm').serialize();
                     /* start ajax submission process */
-                    console.log(postData);
                     $.ajax({
-                        url: '{{ url('/team') }}',
+                        url: '{{ url('/access-level') }}',
                         type: "POST",
                         data: postData,
                         success: function (data, textStatus, jqXHR) {
                             $('#dataTable').DataTable().ajax.reload();
-                            $('#teamForm').trigger("reset");
+                            $('#accessForm').trigger("reset");
                             $.toast({
                                 heading: 'Success',
-                                text: 'Team stored successfully',
+                                text: 'Access stored successfully',
                                 showHideTransition: 'slide',
                                 icon: 'success'
                             })
@@ -107,16 +109,17 @@
                         "serverSide": true,
                         "paging": false,
                         "dataSrc": "data",
-                        "ajax": '{{ url('/team') }}',
+                        "ajax": '{{ url('/access-level') }}',
                         "columnDefs": [{
                             "targets": 0,
                             "render": function ( data, type, row, meta ) {
                                 var itemID = row['uuid'];
-                                return '<a href="team/' + itemID + '/details">' + data + '</a>';
+                                return '<a href="access/' + itemID + '/details">' + data + '</a>';
                             }
                         }],
                         "columns": [
                             {"data": "name"},
+                            {"data": "level"},
                             {"data": "updated_at"}
                         ]
                     });

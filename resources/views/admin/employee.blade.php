@@ -50,6 +50,7 @@
                 data: postData,
                 success: function (data, textStatus, jqXHR) {
                     // $('#dataTable').DataTable().ajax.reload();
+                    $('#employeeForm').trigger("reset");
                     $.toast({
                         heading: 'Success',
                         text: 'Employee stored successfully',
@@ -62,9 +63,7 @@
                 }
             });
             e.preventDefault(); //STOP default action
-
             /* ends ajax submission process */
-
         });
         </script>
 @stop

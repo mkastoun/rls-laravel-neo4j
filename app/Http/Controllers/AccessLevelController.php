@@ -21,7 +21,13 @@ class AccessLevelController extends Controller
      */
     public function index()
     {
-        //
+        return response()->json(
+            [
+                'success' => true,
+                'message' => 'Access level list',
+                'data' => $this->accessLevelService->access()
+            ]
+        );
     }
 
     /**
@@ -47,9 +53,15 @@ class AccessLevelController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(string $accessUuid)
     {
-        //
+        return response()->json(
+            [
+                'success' => true,
+                'message' => 'Access level details',
+                'data' => $this->accessLevelService->accessDetails($accessUuid)
+            ]
+        );
     }
 
     /**
@@ -73,5 +85,27 @@ class AccessLevelController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    public function employeeWithoutAccess()
+    {
+        return response()->json(
+            [
+                'success' => true,
+                'message' => 'Employee list without access',
+                'data' => $this->accessLevelService->employeeWithoutAccess()
+            ]
+        );
+    }
+
+    public function teamWithNoAccess()
+    {
+        return response()->json(
+            [
+                'success' => true,
+                'message' => 'Team list without access',
+                'data' => $this->accessLevelService->teamWithoutAccess()
+            ]
+        );
     }
 }

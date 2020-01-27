@@ -52,6 +52,13 @@
                 <span>Folder</span>
             </a>
         </li>
+        <hr class="sidebar-divider my-0">
+        <li class="nav-item">
+            <a class="nav-link" href="{{ route('frontEndAccess') }}">
+                <i class="fas fa-universal-access fa-cog"></i>
+                <span>Access</span>
+            </a>
+        </li>
         <!-- Divider -->
         <!-- Divider -->
         <hr class="sidebar-divider my-0">

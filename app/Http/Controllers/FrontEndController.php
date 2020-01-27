@@ -2,6 +2,7 @@
 
     namespace App\Http\Controllers;
 
+    use App\Http\Services\AccessLevelService;
     use App\Http\Services\TeamService;
     use Illuminate\Http\Request;
     use Illuminate\Http\Response;
@@ -108,5 +109,15 @@
         public function folderDetails()
         {
             return view('admin.folder-details');
+        }
+
+        public function access()
+        {
+            return view('admin.access');
+        }
+
+        public function accessDetails()
+        {
+            return view('admin.access-details');
         }
     }

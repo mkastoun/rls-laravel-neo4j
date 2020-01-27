@@ -114,5 +114,55 @@ class AccessLevelService
         $team = Folder::query()->where('uuid', '=', $teamUuid)->first();
         return (!empty($team->access)) ? $team->access->toArray() : [];
     }
-    
+
+    /**
+     * Function responsible return access level list
+     *
+     * @return \Illuminate\Database\Eloquent\Builder|\Illuminate\Database\Eloquent\Model
+     */
+    public function access()
+    {
+        $access = AccessLevel::all();
+        return (!empty($access)) ? $access->toArray() : [];
+    }
+
+    /**
+     * Function responsible return access level list
+     *
+     * @return \Illuminate\Database\Eloquent\Builder|\Illuminate\Database\Eloquent\Model
+     */
+    public function accessDetails(string $accessUuid)
+    {
+        $access = AccessLevel::query()->where('uuid', '=', $accessUuid)->first();
+        return (!empty($access)) ? $access->toArray() : [];
+    }
+
+    public function employeeWithoutAccess()
+    {
+        $employees = Employee::all();
+        $result = [];
+        foreach ($employees as $employee)
+        {
+            if ($employee->access()->count() == 0) {
+                $result[] = $employee->toArray();
+            }
+        }
+
+        return $result;
+    }
+
+    public function teamWithoutAccess()
+    {
+        $teams = Team::all();
+        $result = [];
+        foreach ($teams as $team)
+        {
+            if ($team->access()->count() == 0) {
+                $result[] = $team->toArray();
+            }
+        }
+
+        return $result;
+    }
+
 }

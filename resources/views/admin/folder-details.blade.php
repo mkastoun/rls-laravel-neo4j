@@ -133,6 +133,7 @@
                         data: postData,
                         success: function (data, textStatus, jqXHR) {
                             $('#itemDataTable').DataTable().ajax.reload();
+                            $('#itemForm').trigger("reset");
                             $.toast({
                                 heading: 'Success',
                                 text: 'Item stored successfully',

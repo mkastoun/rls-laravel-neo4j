@@ -55,28 +55,31 @@ Route::group([
 Route::resource('access-level', 'AccessLevelController');
 
 Route::group([
-    'prefix' => 'access/{accessUuid}/employee/{employeeUuid}'
+    'prefix' => 'access/{accessUuid}/'
 ], function () {
-    Route::resource('/', 'AccessEmployeeController');
-});
-
-Route::group([
-    'prefix' => 'access/{accessUuid}/item/{itemUuid}'
-], function () {
-    Route::resource('/', 'AccessItemController');
-});
-
-Route::group([
-    'prefix' => 'access/{accessUuid}/folder/{folderUuid}'
-], function () {
-    Route::resource('/', 'AccessFolderController');
-});
-
-Route::group([
-    'prefix' => 'access/{accessUuid}/team/{teamUuid}'
-], function () {
-    Route::post('/', 'AccessTeamController@store');
-    Route::put('/', 'AccessTeamController@update');
+    Route::get('access-no-employee', 'AccessLevelController@employeeWithoutAccess')->name('employeeWithNoAccess');
+    Route::get('access-no-team', 'AccessLevelController@teamWithNoAccess')->name('teamWithNoAccess');
+    Route::group([
+        'prefix' => 'team/{teamUuid}'
+    ], function () {
+        Route::post('/', 'AccessTeamController@store');
+        Route::put('/', 'AccessTeamController@update');
+    });
+    Route::group([
+        'prefix' => 'folder/{folderUuid}'
+    ], function () {
+        Route::resource('/', 'AccessFolderController');
+    });
+    Route::group([
+        'prefix' => 'item/{itemUuid}'
+    ], function () {
+        Route::resource('/', 'AccessItemController');
+    });
+    Route::group([
+        'prefix' => 'employee/{employeeUuid}'
+    ], function () {
+        Route::post('/', 'AccessEmployeeController@store')->name('assignAccessToEmployee');
+    });
 });
 
 Route::group([
@@ -88,5 +91,7 @@ Route::group([
     Route::get('/team/{teamUuid}/details', 'FrontEndController@teamDetails')->name('frontEndTeamDetails');
     Route::get('/folder', 'FrontEndController@folder')->name('frontEndFolder');
     Route::get('/folder/{folderUuid}/details', 'FrontEndController@folderDetails')->name('frontEndFolderDetails');
+    Route::get('/access', 'FrontEndController@access')->name('frontEndAccess');
+    Route::get('/access/{accessUuid}/details', 'FrontEndController@accessDetails')->name('frontEndAccessDetails');
 });
 
