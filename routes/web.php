@@ -59,6 +59,8 @@ Route::group([
 ], function () {
     Route::get('access-no-employee', 'AccessLevelController@employeeWithoutAccess')->name('employeeWithNoAccess');
     Route::get('access-no-team', 'AccessLevelController@teamWithNoAccess')->name('teamWithNoAccess');
+    Route::get('access-no-folder', 'AccessLevelController@folderWithNoAccess')->name('folderWithNoAccessSelect');
+    Route::get('access-no-item', 'AccessLevelController@itemWithNoAccess')->name('itemWithNoAccessSelect');
     Route::group([
         'prefix' => 'team/{teamUuid}'
     ], function () {

@@ -42,6 +42,6 @@ class Item extends NeoEloquent
 
     public function access()
     {
-        return $this->belongsTo('App\Models\AccessLevel', 'HAS_ACCESS_LEVEL');
+        return $this->hasOne('App\Models\AccessLevel', 'HAS_ACCESS_LEVEL');
     }
 }

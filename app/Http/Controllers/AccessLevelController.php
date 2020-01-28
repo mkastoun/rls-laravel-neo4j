@@ -92,7 +92,7 @@ class AccessLevelController extends Controller
         return response()->json(
             [
                 'success' => true,
-                'message' => 'Employee list without access',
+                'message' => 'Employees list without access',
                 'data' => $this->accessLevelService->employeeWithoutAccess()
             ]
         );
@@ -103,8 +103,30 @@ class AccessLevelController extends Controller
         return response()->json(
             [
                 'success' => true,
-                'message' => 'Team list without access',
+                'message' => 'Teams list without access',
                 'data' => $this->accessLevelService->teamWithoutAccess()
+            ]
+        );
+    }
+
+    public function folderWithNoAccess()
+    {
+        return response()->json(
+            [
+                'success' => true,
+                'message' => 'folders list without access',
+                'data' => $this->accessLevelService->folderWithoutAccess()
+            ]
+        );
+    }
+
+    public function itemWithNoAccess()
+    {
+        return response()->json(
+            [
+                'success' => true,
+                'message' => 'items list without access',
+                'data' => $this->accessLevelService->itemWithoutAccess()
             ]
         );
     }

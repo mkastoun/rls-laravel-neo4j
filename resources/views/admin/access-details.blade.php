@@ -89,6 +89,62 @@
                 </div>
             </div>
         </div>
+
+        <div class="col-xl-12 col-lg-12">
+            <div class="card shadow mb-4">
+                <!-- Card Header - Dropdown -->
+                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                    <h6 class="m-0 font-weight-bold text-primary">Grant access to folder</h6>
+                    <div class="dropdown no-arrow">
+                        <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown"
+                           aria-haspopup="true" aria-expanded="false">
+                            <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></i>
+                        </a>
+                    </div>
+                </div>
+                <!-- Card Body -->
+                <!-- Card Body -->
+                <div class="card-body">
+                    <form class="form-group" id="accessFolderForm">
+                        <label for="folderWithNoAccessSelect">Folder</label>
+                        <select id="folderWithNoAccessSelect" class="form-control" name="employee">
+                            <option value="" selected disabled>select a folder</option>
+                        </select>
+                        {{ csrf_field() }}
+                        <br/>
+                        <input type="submit" id="addButton" class="btn btn-primary"/>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xl-12 col-lg-12">
+            <div class="card shadow mb-4">
+                <!-- Card Header - Dropdown -->
+                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                    <h6 class="m-0 font-weight-bold text-primary">Grant access to Item</h6>
+                    <div class="dropdown no-arrow">
+                        <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown"
+                           aria-haspopup="true" aria-expanded="false">
+                            <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></i>
+                        </a>
+                    </div>
+                </div>
+                <!-- Card Body -->
+                <!-- Card Body -->
+                <div class="card-body">
+                    <form class="form-group" id="accessItemForm">
+                        <label for="itemWithNoAccessSelect">Items</label>
+                        <select id="itemWithNoAccessSelect" class="form-control" name="employee">
+                            <option value="" selected disabled>select an item</option>
+                        </select>
+                        {{ csrf_field() }}
+                        <br/>
+                        <input type="submit" id="addButton" class="btn btn-primary"/>
+                    </form>
+                </div>
+            </div>
+        </div>
     </div>
         <!-- Content Row -->
         @stop
@@ -159,6 +215,70 @@
                     e.preventDefault(); //STOP default action
                     /* ends ajax submission process employeeWithNoAccess */
                 });
+
+                $('#accessFolderForm').submit(function (e) {
+                    var folderUuid = $('#folderWithNoAccessSelect').val();
+                    var accessUuid = '{{ Request::route('accessUuid')}}';
+                    console.log(folderUuid);
+                    console.log(accessUuid);
+                    var url = '/access/' + accessUuid + '/folder/'+ folderUuid;
+                    /* start ajax submission process */
+                    $.ajax({
+                        url: url,
+                        type: "POST",
+                        data: '{{ csrf_token() }}',
+                        success: function (data, textStatus, jqXHR) {
+                            $('#folderWithNoAccessSelect')
+                                .find('option')
+                                .remove()
+                                .end();
+                            folderWithoutAccess();
+                            $.toast({
+                                heading: 'Success',
+                                text: 'Access grant to folder successfully',
+                                showHideTransition: 'slide',
+                                icon: 'success'
+                            })
+                        },
+                        error: function (jqXHR, textStatus, errorThrown) {
+                            alert('Error occurred!');
+                        }
+                    });
+                    e.preventDefault(); //STOP default action
+                    /* ends ajax submission process employeeWithNoAccess */
+                });
+
+                $('#accessItemForm').submit(function (e) {
+                    var itemUuid = $('#itemWithNoAccessSelect').val();
+                    var accessUuid = '{{ Request::route('accessUuid')}}';
+                    console.log(itemUuid);
+                    console.log(accessUuid);
+                    var url = '/access/' + accessUuid + '/item/'+ itemUuid;
+                    /* start ajax submission process */
+                    $.ajax({
+                        url: url,
+                        type: "POST",
+                        data: '{{ csrf_token() }}',
+                        success: function (data, textStatus, jqXHR) {
+                            $('#itemWithNoAccessSelect')
+                                .find('option')
+                                .remove()
+                                .end();
+                            itemWithoutAccess();
+                            $.toast({
+                                heading: 'Success',
+                                text: 'Access grant to item successfully',
+                                showHideTransition: 'slide',
+                                icon: 'success'
+                            })
+                        },
+                        error: function (jqXHR, textStatus, errorThrown) {
+                            alert('Error occurred!');
+                        }
+                    });
+                    e.preventDefault(); //STOP default action
+                    /* ends ajax submission process employeeWithNoAccess */
+                });
                 $(document).ready(function () {
                     $.get("{{ url('/access-level',  ['accessUuid' => Request::route('accessUuid')]) }}", function (data, status) {
                         $('#accessName').html(data.data.name);
@@ -166,6 +286,8 @@
                     });
                     employeeWithoutAccess();
                     teamWithoutAccess();
+                    folderWithoutAccess();
+                    itemWithoutAccess();
                 });
 
                 function employeeWithoutAccess()
@@ -185,6 +307,25 @@
                         });
                     });
                 }
+
+                function folderWithoutAccess()
+                {
+                    $.get("{{ route('folderWithNoAccessSelect',  ['accessUuid' => Request::route('accessUuid')]) }}", function (data, status) {
+                        $.each(data.data, function( index, value ) {
+                            $('#folderWithNoAccessSelect').append('<option value="' + value.uuid + '">' + value.name + '</option>');
+                        });
+                    });
+                }
+                function itemWithoutAccess()
+                {
+                    $.get("{{ route('itemWithNoAccessSelect',  ['accessUuid' => Request::route('accessUuid')]) }}", function (data, status) {
+                        $.each(data.data, function( index, value ) {
+                            $('#itemWithNoAccessSelect').append('<option value="' + value.uuid + '">' + value.name + '</option>');
+                        });
+                    });
+                }
+
+
             </script>
 
 @stop

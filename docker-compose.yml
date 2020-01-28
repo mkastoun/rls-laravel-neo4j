@@ -1,7 +1,5 @@
 version: '2'
-
 services:
-
   #PHP Service
   app:
     build:
@@ -45,7 +43,12 @@ services:
       - "7474:7474"
       - "1337:1337"
     environment:
-      - NEO4J_AUTH=neo4j:123456
+      - NEO4J_AUTH=neo4j/123456
+      - NEO4J_HEAP_MEMORY=2048 # configure the heap memory
+      - NEO4J_CACHE_MEMORY=1G # configure the cache memory
+      - NEO4J_dbms_security_procedures_unrestricted=apoc.*
+      - NEO4J_apoc_import_file_enabled=true
+      - NEO4J_dbms_shell_enabled=false
     volumes_from:
       - volumes_data
   ### Databases Data Container ################################

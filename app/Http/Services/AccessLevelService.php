@@ -165,4 +165,32 @@ class AccessLevelService
         return $result;
     }
 
+    public function folderWithoutAccess()
+    {
+        $folders = Folder::all();
+        $result = [];
+        foreach ($folders as $folder)
+        {
+            if ($folder->access()->count() == 0) {
+                $result[] = $folder->toArray();
+            }
+        }
+
+        return $result;
+    }
+
+    public function itemWithoutAccess()
+    {
+        $items = Item::all();
+        $result = [];
+        foreach ($items as $item)
+        {
+            if ($item->access()->count() == 0) {
+                $result[] = $item->toArray();
+            }
+        }
+
+        return $result;
+    }
+
 }

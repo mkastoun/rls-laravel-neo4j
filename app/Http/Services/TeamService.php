@@ -83,9 +83,13 @@
         public function getTeamAccessibleFolders(string $teamUuid)
         {
             $team = Team::query()->where('uuid', '=', $teamUuid)->first();
-            $teamAccessUuid = $team->access->uuid;
-            $access = AccessLevel::query()->where('uuid', '=', $teamAccessUuid)->first();
-            return (!empty($access->folders)) ? $access->folders->toArray() : [];
+            if (!empty($team->access)) {
+                $teamAccessUuid = $team->access->uuid;
+                $access = AccessLevel::query()->where('uuid', '=', $teamAccessUuid)->first();
+                return ( !empty($access->folders)) ? $access->folders->toArray() : [];
+            } else {
+                return [];
+            }
         }
 
         /**
@@ -98,9 +102,12 @@
         public function getTeamAccessibleItems(string $teamUuid)
         {
             $team = Team::query()->where('uuid', '=', $teamUuid)->first();
-            $teamAccessUuid = $team->access->uuid;
-            $access = AccessLevel::query()->where('uuid', '=', $teamAccessUuid)->first();
-            return (!empty($access->items)) ? $access->items->toArray() : [];
+            if (!empty($team->access)) {
+                $teamAccessUuid = $team->access->uuid;
+                $access = AccessLevel::query()->where('uuid', '=', $teamAccessUuid)->first();
+                return ($access && !empty($access->items)) ? $access->items->toArray() : [];
+            } else {
+                return [];
+            }
         }
-
     }
