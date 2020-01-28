@@ -27,6 +27,11 @@ class EmployeeService
         $this->uuid = Str::uuid();
     }
 
+    public function getEmployee(string $employeeUuid)
+    {
+        $employee = Employee::query()->where('uuid', '=', $employeeUuid)->first();
+        return $employee->toArray();
+    }
     /**
      * Function responsible to create an employee
      *
@@ -86,6 +91,9 @@ class EmployeeService
     public function employeeItems(string $employeeUuid)
     {
         $employee = Employee::query()->where('uuid', '=', $employeeUuid)->first();
+        if (empty($employee->access)) {
+            return [];
+        }
         $employeeAccessUuid = $employee->access->uuid;
         $access = AccessLevel::query()->where('uuid', '=', $employeeAccessUuid)->first();
         return (!empty($access->items)) ? $access->items->toArray() : [];
@@ -101,6 +109,9 @@ class EmployeeService
     public function teamOfEmployee(string $employeeUuid)
     {
         $employee = Employee::query()->where('uuid', '=', $employeeUuid)->first();
+        if (empty($employee->team)) {
+            return [];
+        }
         $teamUuid = $employee->team->uuid;
         $team = Team::query()->where('uuid', '=', $teamUuid)->first();
         return $team->toArray();
@@ -129,6 +140,9 @@ class EmployeeService
     public function getEmployeeAccessibleFolders(string $teamUuid)
     {
         $employee = Employee::query()->where('uuid', '=', $teamUuid)->first();
+        if (empty($employee->access)) {
+            return [];
+        }
         $teamAccessUuid = $employee->access->uuid;
         $access = AccessLevel::query()->where('uuid', '=', $teamAccessUuid)->first();
         return (!empty($access->folders)) ? $access->folders->toArray() : [];
@@ -178,5 +192,22 @@ class EmployeeService
         $teamAccessUuid = $team->access->uuid;
         $access = AccessLevel::query()->where('uuid', '=', $teamAccessUuid)->first();
         return (!empty($access->folders)) ? $access->folders->toArray() : [];
+    }
+
+    /**
+     * Returns Employees without Team
+     *
+     * @return array
+     */
+    public function getOrphanEmployee()
+    {
+        $employees = Employee::all();
+        $result = [];
+        foreach ($employees as $employee) {
+            if ($employee->team()->count() == 0) {
+                $result[] = $employee->toArray();
+            }
+        }
+        return $result;
     }
 }

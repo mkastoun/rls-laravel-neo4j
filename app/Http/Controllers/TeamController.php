@@ -158,4 +158,24 @@ class TeamController extends Controller
         ]);
     }
 
+    public function detachEmployee(string $teamUuid, string $employeeUuid)
+    {
+        $this->teamService->unassignEmployee($teamUuid, $employeeUuid);
+        return response()->json([
+            'success' => true,
+            'message' => 'Team employee removed',
+            'data' => [],
+        ]);
+    }
+
+    public function addOrphanEmployeeToTeam($teamUuid, $employeeUuid)
+    {
+        $this->teamService->assignEmployeeToTeam($teamUuid, $employeeUuid);
+        return response()->json([
+            'success' => true,
+            'message' => 'Employee added to team successfully',
+            'data' => [],
+        ]);
+    }
+
 }

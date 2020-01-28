@@ -11,6 +11,11 @@
                             <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Folder Access Level</div>
                             <div class="h5 mb-0 font-weight-bold text-gray-800" id="folderAccessLevel">N/A</div>
                         </div>
+                        <div class="col-auto inner-div">
+                            <button class="btn btn-danger" id="revokeAccess">Revoke Access</button>
+                            <input type="hidden" value="" id="folderAccessUuid" />
+                        </div>
+                        &nbsp;&nbsp;
                         <div class="col-auto">
                             <i class="fas fa-lock fa-2x text-gray-300"></i>
                         </div>
@@ -151,6 +156,12 @@
                 $(document).ready(function () {
                     $.get("{{ route('folderAccess',  ['folderUuid' => Request::route('folderUuid')]) }}", function (data, status) {
                         $('#folderAccessLevel').html(data.data.name);
+                        if(typeof(data.data.uuid) != "undefined" && data.data.uuid !== null) {
+                            $('#folderAccessUuid').val(data.data.uuid);
+                            $('#revokeAccess').css('display', 'block');
+                        } else {
+                            $('#revokeAccess').css('display', 'none');
+                        }
                     });
                     $.get("{{ url('folder',  ['folderUuid' => Request::route('folderUuid')]) }}", function (data, status) {
                         $('#folderName').html(data.data.name);
@@ -167,6 +178,35 @@
                             {"data": "description"},
                             {"data": "updated_at"}
                         ]
+                    });
+                    $('#revokeAccess').click( function (e) {
+                        var accessUuid = $('#folderAccessUuid').val();
+                        var folderUuid = '{{ Request::route('folderUuid') }}';
+                        var url = '/access/' + accessUuid + '/folder/' + folderUuid;
+                        /* start ajax submission process */
+                        $.ajax({
+                            url: url,
+                            type: "POST",
+                            data: {
+                                "_method": 'DELETE',
+                                "_token": '{{csrf_token()}}',
+                            },
+                            success: function (data, textStatus, jqXHR) {
+                                $('#itemDataTable').DataTable().ajax.reload();
+                                $('#revokeAccess').css('display','none');
+                                $.toast({
+                                    heading: 'Failure',
+                                    text: 'Employee access revoked',
+                                    showHideTransition: 'slide',
+                                    icon: 'failure'
+                                })
+                            },
+                            error: function (jqXHR, textStatus, errorThrown) {
+                                alert('Error occurred!');
+                            }
+                        });
+                        e.preventDefault(); //STOP default action
+                        /* ends ajax submission process */
                     });
                 });
             </script>

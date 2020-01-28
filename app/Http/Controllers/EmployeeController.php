@@ -209,4 +209,24 @@ class EmployeeController extends Controller
                 'data' => $this->employeeService->teamEmployeeFolders($employeeUuid),
             ]);
     }
+
+    public function getOrphanEmployee()
+    {
+        return response()->json(
+            [
+                'success' => true,
+                'message' => 'Employee without team',
+                'data' => $this->employeeService->getOrphanEmployee(),
+            ]);
+    }
+
+    public function getEmployeeInfo(string $employeeUuid)
+    {
+        return response()->json(
+            [
+                'success' => true,
+                'message' => 'Employee without team',
+                'data' => $this->employeeService->getEmployee($employeeUuid),
+            ]);
+    }
 }

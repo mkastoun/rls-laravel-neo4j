@@ -91,4 +91,16 @@ class AccessTeamController extends Controller
         );
     }
 
+    public function revokeTeamAccess(string $accessUuid, string $teamUuid)
+    {
+        $this->accessLevelService->revokeTeamAccess($accessUuid, $teamUuid);
+        return response()->json(
+            [
+                'success' => true,
+                'message' => 'Team Access revoked',
+                'data' => [],
+            ]
+        );
+    }
+
 }

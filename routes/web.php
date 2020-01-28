@@ -32,21 +32,25 @@ Route::group([
 
 Route::resource('team', 'TeamController');
 Route::post('employee/orphan', 'EmployeeController@storeOrphanEmployee');
+Route::get('employee/orphan', 'EmployeeController@getOrphanEmployee')->name('orphanEmployeeList');
 
 Route::group([
     'prefix' => 'team/{teamUuid}'
 ], function () {
     Route::post('/employee', 'EmployeeController@store')->name('addTeamEmployee');
+    Route::post('/employee-orphan/{employeeUuid}', 'TeamController@addOrphanEmployeeToTeam')->name('addTeamOrphanEmployee');
     Route::get('/employee', 'TeamController@employees')->name('teamEmployees');
     Route::get('/folders', 'TeamController@folders')->name('teamFolders');
     Route::get('/items', 'TeamController@items')->name('teamItems');
     Route::get('/access', 'TeamController@access')->name('teamAccess');
+    Route::delete('/employee/{employeeUuid}', 'TeamController@detachEmployee')->name('detachEmployeeFromTeam');
 });
 
 Route::group([
     'prefix' => 'employee/{employeeUuid}'
 ], function () {
     Route::get('/', 'EmployeeController@show');
+    Route::get('/details', 'EmployeeController@getEmployeeInfo')->name('employeeShow');;
     Route::get('/folders', 'EmployeeController@folders')->name('employeeFolders');
     Route::get('/items', 'EmployeeController@items')->name('employeeItems');
     Route::get('/access', 'EmployeeController@access')->name('employeeAccess');
@@ -69,11 +73,13 @@ Route::group([
     ], function () {
         Route::post('/', 'AccessTeamController@store');
         Route::put('/', 'AccessTeamController@update');
+        Route::delete('/', 'AccessTeamController@revokeTeamAccess')->name('revokeTeamAccess');
     });
     Route::group([
         'prefix' => 'folder/{folderUuid}'
     ], function () {
-        Route::resource('/', 'AccessFolderController');
+        Route::post('/', 'AccessFolderController@store');
+        Route::delete('/', 'AccessFolderController@destroy');
     });
     Route::group([
         'prefix' => 'item/{itemUuid}'
@@ -84,6 +90,7 @@ Route::group([
         'prefix' => 'employee/{employeeUuid}'
     ], function () {
         Route::post('/', 'AccessEmployeeController@store')->name('assignAccessToEmployee');
+        Route::delete('/', 'AccessEmployeeController@revokeEmployeeAccess')->name('revokeEmployeeAccess');
     });
 });
 

@@ -12,6 +12,11 @@
                             <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Team Access Level</div>
                             <div class="h5 mb-0 font-weight-bold text-gray-800" id="teamAccessLevel">N/A</div>
                         </div>
+                        <div class="col-auto inner-div">
+                            <button class="btn btn-danger" id="revokeAccess">Revoke Access</button>
+                            <input type="hidden" value="" id="teamAccessUuid" />
+                        </div>
+                        &nbsp;&nbsp;
                         <div class="col-auto">
                             <i class="fas fa-lock fa-2x text-gray-300"></i>
                         </div>
@@ -100,6 +105,37 @@
 
     <div class="card shadow mb-4">
         <div class="card-header py-3">
+            <h4 class="m-0 font-weight-bold text-primary">Orphan Employee</h4>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-bordered" id="orphanEmployeeDataTable" width="100%" cellspacing="0">
+                    <thead>
+                    <tr>
+                        <th>Employee Name</th>
+                        <th>Employee Email</th>
+                        <th>Last Updated Date</th>
+                        <th>Action</th>
+                    </tr>
+                    </thead>
+                    <tfoot>
+                    <tr>
+                        <th>Employee Name</th>
+                        <th>Employee Email</th>
+                        <th>Last Updated Date</th>
+                        <th>Action</th>
+                    </tr>
+                    </tfoot>
+                    <tbody>
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
             <h4 class="m-0 font-weight-bold text-primary">Team Accessible Folders</h4>
         </div>
         <div class="card-body">
@@ -164,7 +200,7 @@
             <script src="{{ asset('vendor/datatables/dataTables.bootstrap4.min.js') }}"></script>
 
             <!-- Page level custom scripts -->
-            {{--            <script src="{{ asset('js/demo/datatables-demo.js') }}"></script>--}}
+            {{--           <script src="{{ asset('js/demo/datatables-demo.js') }}"></script>--}}
         @stop
         @section('javascript_naive')
             <script>
@@ -195,6 +231,12 @@
                 $(document).ready(function () {
                     $.get("{{ route('teamAccess',  ['teamUuid' => Request::route('teamUuid')]) }}", function (data, status) {
                         $('#teamAccessLevel').html(data.data.name);
+                        if(typeof(data.data.uuid) != "undefined" && data.data.uuid !== null) {
+                            $('#teamAccessUuid').val(data.data.uuid);
+                            $('#revokeAccess').css('display', 'block');
+                        } else {
+                            $('#revokeAccess').css('display', 'none');
+                        }
                     });
                     $.get("{{ url('team',  ['teamUuid' => Request::route('teamUuid')]) }}", function (data, status) {
                         $('#teamInfo').html(data.data.name);
@@ -241,7 +283,81 @@
                             {"data": "updated_at"}
                         ]
                     });
+                    $('#orphanEmployeeDataTable').DataTable({
+                        "processing": true,
+                        "serverSide": true,
+                        "paging": false,
+                        "ajax": '{{ route('orphanEmployeeList') }}',
+                        "columnDefs": [{
+                            "targets": 3,
+                            "render": function (data, type, row, meta) {
+                                var employeeId = row['uuid'];
+                                return '<a type="button" class="btn btn-primary" onclick="addToTeam(\''+ employeeId +'\')" style="color: white">Add To Team</a>';
+                            }
+                        }],
+                        "columns": [
+                            {"data": "name"},
+                            {"data": "email"},
+                            {"data": "updated_at"}
+                        ]
+                    });
+                    $('#revokeAccess').click( function (e) {
+                        var accessUuid = $('#teamAccessUuid').val();
+                        var teamUuid = '{{ Request::route('teamUuid') }}';
+                        var url = '/access/' + accessUuid + '/team/' + teamUuid;
+                        /* start ajax submission process */
+                        $.ajax({
+                            url: url,
+                            type: "POST",
+                            data: {
+                                "_method": 'DELETE',
+                                "_token": '{{csrf_token()}}',
+                            },
+                            success: function (data, textStatus, jqXHR) {
+                                $('#itemDataTable').DataTable().ajax.reload();
+                                $('#folderDataTable').DataTable().ajax.reload();
+                                $('#revokeAccess').css('display','none');
+                                $.toast({
+                                    heading: 'Failure',
+                                    text: 'Employee access revoked',
+                                    showHideTransition: 'slide',
+                                    icon: 'failure'
+                                })
+                            },
+                            error: function (jqXHR, textStatus, errorThrown) {
+                                alert('Error occurred!');
+                            }
+                        });
+                        e.preventDefault(); //STOP default action
+                        /* ends ajax submission process */
+                    });
                 });
+
+                function addToTeam(employeeUuid) {
+                    var teamUuid = '{{ Request::route('teamUuid') }}';
+                    var url = '/team/'+ teamUuid +'/employee-orphan/'+ employeeUuid
+                    $.ajax({
+                        url: url,
+                        type: "POST",
+                        data: {
+                            "_token": '{{csrf_token()}}',
+                        },
+                        success: function (data, textStatus, jqXHR) {
+                            $('#orphanEmployeeDataTable').DataTable().ajax.reload();
+                            $('#dataTable').DataTable().ajax.reload();
+                            $.toast({
+                                heading: 'Success',
+                                text: 'Employee added to team successfully',
+                                showHideTransition: 'slide',
+                                icon: 'success'
+                            })
+                        },
+                        error: function (jqXHR, textStatus, errorThrown) {
+                            alert('Error occurred!');
+                        }
+                    });
+                }
+
             </script>
 
 @stop

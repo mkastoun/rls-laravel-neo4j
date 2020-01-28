@@ -70,9 +70,16 @@ class AccessFolderController extends Controller
      *
      * @return Response
      */
-    public function destroy($id)
+    public function destroy(string $accessUuid, string $folderUuid)
     {
-        //
+        $this->accessLevelService->revokeFolderAccess($accessUuid, $folderUuid);
+        return response()->json(
+            [
+                'success' => true,
+                'message' => 'Team Access revoked',
+                'data' => [],
+            ]
+        );
     }
 
     /**

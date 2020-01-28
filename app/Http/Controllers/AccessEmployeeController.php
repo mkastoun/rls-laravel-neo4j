@@ -91,4 +91,20 @@ class AccessEmployeeController extends Controller
             ]
         );
     }
+
+    /**
+     * Revoke employee access
+     *
+     * @return JsonResponse
+     */
+    public function revokeEmployeeAccess(string $accessUuid, string $employeeUuid)
+    {
+        return response()->json(
+            [
+                'success' => true,
+                'message' => 'Revoke employee access',
+                'data' => $this->accessLevelService->revokeEmployeeAccess($accessUuid, $employeeUuid),
+            ]
+        );
+    }
 }

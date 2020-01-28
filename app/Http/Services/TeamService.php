@@ -3,6 +3,7 @@
 namespace App\Http\Services;
 
 use App\Models\AccessLevel;
+use App\Models\Employee;
 use App\Models\Team;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
@@ -126,5 +127,18 @@ class TeamService
         } else {
             return [];
         }
+    }
+
+    public function unassignEmployee(string $teamUuid, string $employeeUuid)
+    {
+        $employee = Employee::query()->where('uuid', '=', $employeeUuid)->first();
+        $team = Team::query()->where('uuid', '=', $teamUuid)->first();
+        $team->employees()->detach($employee);
+    }
+
+    public function assignEmployeeToTeam(string $teamUuid, string $employeeUuid)
+    {
+        $employeeService = new EmployeeService();
+        $employeeService->assignEmployeeToTeam($employeeUuid, $teamUuid);
     }
 }
