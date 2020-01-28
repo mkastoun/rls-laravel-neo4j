@@ -27,6 +27,7 @@ Route::group([
     'prefix' => 'folder/{folderUuid}/item'
 ], function () {
     Route::post('/', 'ItemController@store')->name('itemStore');
+    Route::get('/', 'ItemController@index')->name('itemStore');
 });
 
 Route::resource('team', 'TeamController');
@@ -51,6 +52,7 @@ Route::group([
     Route::get('/access', 'EmployeeController@access')->name('employeeAccess');
     Route::get('/team', 'EmployeeController@team')->name('employeeTeam');
     Route::get('/team/items', 'EmployeeController@teamItems')->name('employeeTeamItems');
+    Route::get('/team/folder', 'EmployeeController@folderItems')->name('employeeFolderItems');
 });
 
 Route::resource('access-level', 'AccessLevelController');
@@ -58,10 +60,10 @@ Route::resource('access-level', 'AccessLevelController');
 Route::group([
     'prefix' => 'access/{accessUuid}/'
 ], function () {
-    Route::get('access-no-employee', 'AccessLevelController@employeeWithoutAccess')->name('employeeWithNoAccess');
-    Route::get('access-no-team', 'AccessLevelController@teamWithNoAccess')->name('teamWithNoAccess');
-    Route::get('access-no-folder', 'AccessLevelController@folderWithNoAccess')->name('folderWithNoAccessSelect');
-    Route::get('access-no-item', 'AccessLevelController@itemWithNoAccess')->name('itemWithNoAccessSelect');
+    Route::get('access-no-employee', 'AccessEmployeeController@employeeWithoutAccess')->name('employeeWithNoAccess');
+    Route::get('access-no-team', 'AccessTeamController@teamWithNoAccess')->name('teamWithNoAccess');
+    Route::get('access-no-folder', 'AccessFolderController@folderWithNoAccess')->name('folderWithNoAccessSelect');
+    Route::get('access-no-item', 'AccessItemController@itemWithNoAccess')->name('itemWithNoAccessSelect');
     Route::group([
         'prefix' => 'team/{teamUuid}'
     ], function () {

@@ -17,7 +17,7 @@ class AccessLevelController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function index()
     {
@@ -34,10 +34,16 @@ class AccessLevelController extends Controller
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     *
+     * @return \Illuminate\Http\JsonResponse
      */
     public function store(Request $request)
     {
+        $this->validate($request, [
+            'name' => 'required|string',
+            'level' => 'required|number',
+        ]);
+
         return response()->json(
             [
                 'success' => true,
@@ -51,7 +57,8 @@ class AccessLevelController extends Controller
      * Display the specified resource.
      *
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     *
+     * @return \Illuminate\Http\JsonResponse
      */
     public function show(string $accessUuid)
     {
@@ -85,49 +92,5 @@ class AccessLevelController extends Controller
     public function destroy($id)
     {
         //
-    }
-
-    public function employeeWithoutAccess()
-    {
-        return response()->json(
-            [
-                'success' => true,
-                'message' => 'Employees list without access',
-                'data' => $this->accessLevelService->employeeWithoutAccess()
-            ]
-        );
-    }
-
-    public function teamWithNoAccess()
-    {
-        return response()->json(
-            [
-                'success' => true,
-                'message' => 'Teams list without access',
-                'data' => $this->accessLevelService->teamWithoutAccess()
-            ]
-        );
-    }
-
-    public function folderWithNoAccess()
-    {
-        return response()->json(
-            [
-                'success' => true,
-                'message' => 'folders list without access',
-                'data' => $this->accessLevelService->folderWithoutAccess()
-            ]
-        );
-    }
-
-    public function itemWithNoAccess()
-    {
-        return response()->json(
-            [
-                'success' => true,
-                'message' => 'items list without access',
-                'data' => $this->accessLevelService->itemWithoutAccess()
-            ]
-        );
     }
 }

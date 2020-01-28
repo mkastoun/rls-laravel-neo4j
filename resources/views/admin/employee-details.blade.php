@@ -93,6 +93,65 @@
             </div>
         </div>
     </div>
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <h4 class="m-0 font-weight-bold text-primary">Employee Team Accessible Items ( items accessible by
+                employee's team)</h4>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-bordered" id="teamItemDataTable" width="100%" cellspacing="0">
+                    <thead>
+                    <tr>
+                        <th>Item Name</th>
+                        <th>Item Description</th>
+                        <th>Last Updated Date</th>
+                    </tr>
+                    </thead>
+                    <tfoot>
+                    <tr>
+                        <th>Item Name</th>
+                        <th>Item Description</th>
+                        <th>Last Updated Date</th>
+                    </tr>
+                    </tfoot>
+                    <tbody>
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <h4 class="m-0 font-weight-bold text-primary">Employee Team Accessible Folders ( folders accessible by
+                employee's team)</h4>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-bordered" id="teamFolderDataTable" width="100%" cellspacing="0">
+                    <thead>
+                    <tr>
+                        <th>Folder Name</th>
+                        <th>Folder Description</th>
+                        <th>Last Updated Date</th>
+                    </tr>
+                    </thead>
+                    <tfoot>
+                    <tr>
+                        <th>Folder Name</th>
+                        <th>Folder Description</th>
+                        <th>Last Updated Date</th>
+                    </tr>
+                    </tfoot>
+                    <tbody>
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
 
     <!-- Content Row -->
 @stop
@@ -122,9 +181,9 @@
                 "ajax": '{{ route('employeeFolders', ['employeeUuid' => Request::route('employeeUuid')]) }}',
                 "columnDefs": [{
                     "targets": 0,
-                    "render": function ( data, type, row, meta ) {
-                        var itemID = row['uuid'];
-                        return '<a href="admin/folder/' + itemID + '/items">' + data + '</a>';
+                    "render": function (data, type, row, meta) {
+                        var folderId = row['uuid'];
+                        return '<a href="/admin/folder/' + folderId + '/details">' + data + '</a>';
                     }
                 }],
                 "columns": [
@@ -144,6 +203,36 @@
                     {"data": "updated_at"}
                 ]
             });
+
+            $('#teamItemDataTable').DataTable({
+                "processing": true,
+                "serverSide": true,
+                "paging": false,
+                "ajax": '{{ route('employeeTeamItems', ['employeeUuid' => Request::route('employeeUuid')]) }}',
+                "columns": [
+                    {"data": "name"},
+                    {"data": "description"},
+                    {"data": "updated_at"}
+                ]
+            });
+        });
+        $('#teamFolderDataTable').DataTable({
+            "processing": true,
+            "serverSide": true,
+            "paging": false,
+            "ajax": '{{ route('employeeFolderItems', ['employeeUuid' => Request::route('employeeUuid')]) }}',
+            "columnDefs": [{
+                "targets": 0,
+                "render": function (data, type, row, meta) {
+                    var folderId = row['uuid'];
+                    return '<a href="/admin/folder/' + folderId + '/details">' + data + '</a>';
+                }
+            }],
+            "columns": [
+                {"data": "name"},
+                {"data": "description"},
+                {"data": "updated_at"}
+            ]
         });
     </script>
 

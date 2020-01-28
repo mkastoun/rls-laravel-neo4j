@@ -1,113 +1,130 @@
 <?php
 
+namespace App\Http\Services;
 
-    namespace App\Http\Services;
+use App\Models\AccessLevel;
+use App\Models\Team;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Str;
+use Ramsey\Uuid\UuidInterface;
 
+class TeamService
+{
+    /**
+     * @var UuidInterface
+     */
+    protected $uuid;
 
-    use App\Models\AccessLevel;
-    use App\Models\Team;
-    use Illuminate\Database\Eloquent\Builder;
-    use Illuminate\Database\Eloquent\Model;
-    use Illuminate\Support\Str;
-    use Ramsey\Uuid\UuidInterface;
-
-    class TeamService
+    /**
+     * TeamService constructor.
+     */
+    public function __construct()
     {
-        /**
-         * @var UuidInterface
-         */
-        protected $uuid;
+        $this->uuid = Str::uuid();
+    }
 
-        /**
-         * TeamService constructor.
-         */
-        public function __construct()
-        {
-            $this->uuid = Str::uuid();
-        }
+    /**
+     * Function responsible to create a team
+     *
+     * @param  array  $teamDetails  Team data
+     *
+     * @return Builder|Model
+     */
+    public function createTeam(array $teamDetails)
+    {
+        $teamDetails['uuid'] = $this->uuid;
+        return Team::query()->create($teamDetails);
+    }
 
-        /**
-         * Function responsible to create a team
-         *
-         * @param array $teamDetails Team data
-         *
-         * @return Builder|Model
-         */
-        public function createTeam(array $teamDetails)
-        {
-            $teamDetails['uuid'] = $this->uuid;
-            return Team::query()->create($teamDetails);
-        }
+    /**
+     * This function responsible to return all the item accessible by this team
+     *
+     * @param  string  $teamUuid  Team Uuid
+     *
+     * @return mixed
+     */
+    public function getEmployeeAccessibleItemsByTeam(string $teamUuid)
+    {
+        $team = Team::query()->where('uuid', '=', $teamUuid)->first();
+        $teamAccessUuid = $team->access->uuid;
+        $access = AccessLevel::query()->where('uuid', '=', $teamAccessUuid)->first();
+        return $access->items->toArray();
+    }
 
-        /**
-         * This function responsible to return all the item accessible by this team
-         *
-         * @param string $teamUuid Team Uuid
-         *
-         * @return mixed
-         */
-        public function getEmployeeAccessibleItemsByTeam(string $teamUuid)
-        {
-            $team = Team::query()->where('uuid', '=', $teamUuid)->first();
+    // TODO create a function to return the items through the folders, merge it together
+
+    /**
+     * Get all teams
+     *
+     * @return array
+     */
+    public function getAllTeams()
+    {
+        return Team::all()->toArray();
+    }
+
+    /**
+     * Get Team details
+     *
+     * @param  string  $teamUuid  Team Uuid
+     *
+     * @return array
+     */
+    public function teamDetails(string $teamUuid)
+    {
+        $team = Team::query()->where('uuid', '=', $teamUuid)->first();
+        return (!empty($team)) ? $team->toArray() : [];
+    }
+
+    /**
+     * Get Team employee list
+     *
+     * @param  string  $teamUuid  Team Uuid
+     *
+     * @return mixed
+     */
+    public function teamEmployee(string $teamUuid)
+    {
+        $team = Team::query()->where('uuid', '=', $teamUuid)->first();
+        return (!empty($team->employees)) ? $team->employees->toArray() : [];
+    }
+
+    /**
+     * Get list of accessible folder for a specific team
+     *
+     * @param  string  $teamUuid  Team uuid
+     *
+     * @return mixed
+     */
+    public function getTeamAccessibleFolders(string $teamUuid)
+    {
+        $team = Team::query()->where('uuid', '=', $teamUuid)->first();
+        if (!empty($team->access)) {
             $teamAccessUuid = $team->access->uuid;
             $access = AccessLevel::query()->where('uuid', '=', $teamAccessUuid)->first();
-            return $access->items->toArray();
-        }
-
-        // TODO create a function to return the items through the folders, merge it together
-
-        public function getAllTeams()
-        {
-            return Team::all()->toArray();
-        }
-
-        public function teamDetails(string $teamUuid)
-        {
-            $team = Team::query()->where('uuid', '=', $teamUuid)->first();
-            return (!empty($team)) ? $team->toArray() : [];
-        }
-
-        public function teamEmployee(string $teamUuid)
-        {
-            $team = Team::query()->where('uuid', '=', $teamUuid)->first();
-            return $team->employees->toArray();
-        }
-
-        /**
-         * Get list of accessible folder for a specific team
-         *
-         * @param string $teamUuid  Team uuid
-         *
-         * @return mixed
-         */
-        public function getTeamAccessibleFolders(string $teamUuid)
-        {
-            $team = Team::query()->where('uuid', '=', $teamUuid)->first();
-            if (!empty($team->access)) {
-                $teamAccessUuid = $team->access->uuid;
-                $access = AccessLevel::query()->where('uuid', '=', $teamAccessUuid)->first();
-                return ( !empty($access->folders)) ? $access->folders->toArray() : [];
-            } else {
-                return [];
-            }
-        }
-
-        /**
-         * Get list of accessible items for a specific team
-         *
-         * @param string $teamUuid  Team uuid
-         *
-         * @return mixed
-         */
-        public function getTeamAccessibleItems(string $teamUuid)
-        {
-            $team = Team::query()->where('uuid', '=', $teamUuid)->first();
-            if (!empty($team->access)) {
-                $teamAccessUuid = $team->access->uuid;
-                $access = AccessLevel::query()->where('uuid', '=', $teamAccessUuid)->first();
-                return ($access && !empty($access->items)) ? $access->items->toArray() : [];
-            } else {
-                return [];
-            }
+            return (!empty($access->folders)) ? $access->folders->toArray() : [];
+        } else {
+            return [];
         }
     }
+
+    /**
+     * Get list of accessible items for a specific team
+     *
+     * @param  string  $teamUuid  Team uuid
+     *
+     * @return mixed
+     */
+    public function getTeamAccessibleItems(string $teamUuid)
+    {
+        $team = Team::query()->where('uuid', '=', $teamUuid)->first();
+        if (!empty($team->access)) {
+            $teamAccessUuid = $team->access->uuid;
+            $access = AccessLevel::query()->where('uuid', '=', $teamAccessUuid)->first();
+            return ($access && !empty($access->items)) ? $access->items->toArray() : [];
+        } else {
+            return [];
+        }
+    }
+}

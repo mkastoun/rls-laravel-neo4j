@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Http\Services\ItemService;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 
 class ItemController extends Controller
 {
@@ -13,24 +15,37 @@ class ItemController extends Controller
     {
         $this->itemService = $itemService;
     }
+
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return JsonResponse
      */
-    public function index()
+    public function index(string $folderUuid)
     {
-        //
+        return response()->json(
+            [
+                'success' => true,
+                'message' => 'Item list in folder',
+                'data' => $this->itemService->getFolderItems($folderUuid),
+            ]
+        );
     }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @param  Request  $request
+     *
+     * @return JsonResponse
      */
-    public function store(string $folderUuid,Request $request)
+    public function store(string $folderUuid, Request $request)
     {
+        $this->validate($request, [
+            'name' => 'required|string',
+            'description' => 'required|string',
+        ]);
+
         return response()->json(
             [
                 'success' => true,
@@ -44,7 +59,8 @@ class ItemController extends Controller
      * Display the specified resource.
      *
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     *
+     * @return Response
      */
     public function show($id)
     {
@@ -54,9 +70,10 @@ class ItemController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @param  Request  $request
+     * @param  int      $id
+     *
+     * @return Response
      */
     public function update(Request $request, $id)
     {
@@ -67,7 +84,8 @@ class ItemController extends Controller
      * Remove the specified resource from storage.
      *
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     *
+     * @return Response
      */
     public function destroy($id)
     {

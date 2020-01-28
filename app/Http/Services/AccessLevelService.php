@@ -7,12 +7,15 @@ use App\Models\Employee;
 use App\Models\Folder;
 use App\Models\Item;
 use App\Models\Team;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
+use Ramsey\Uuid\UuidInterface;
 
 class AccessLevelService
 {
     /**
-     * @var \Ramsey\Uuid\UuidInterface
+     * @var UuidInterface
      */
     protected $uuid;
 
@@ -29,7 +32,7 @@ class AccessLevelService
      *
      * @param  array  $accessLevelDetails  Access details
      *
-     * @return \Illuminate\Database\Eloquent\Builder|\Illuminate\Database\Eloquent\Model
+     * @return Builder|Model
      */
     public function createAccessLevel(array $accessLevelDetails)
     {
@@ -92,7 +95,7 @@ class AccessLevelService
     /**
      * Get team access level
      *
-     * @param string $teamUuid  Team uuid
+     * @param  string  $teamUuid  Team uuid
      *
      * @return array
      */
@@ -105,7 +108,7 @@ class AccessLevelService
     /**
      * Get folder access level
      *
-     * @param string $teamUuid  Team uuid
+     * @param  string  $teamUuid  Team uuid
      *
      * @return array
      */
@@ -118,7 +121,7 @@ class AccessLevelService
     /**
      * Function responsible return access level list
      *
-     * @return \Illuminate\Database\Eloquent\Builder|\Illuminate\Database\Eloquent\Model
+     * @return Builder|Model
      */
     public function access()
     {
@@ -129,7 +132,7 @@ class AccessLevelService
     /**
      * Function responsible return access level list
      *
-     * @return \Illuminate\Database\Eloquent\Builder|\Illuminate\Database\Eloquent\Model
+     * @return Builder|Model
      */
     public function accessDetails(string $accessUuid)
     {
@@ -137,12 +140,17 @@ class AccessLevelService
         return (!empty($access)) ? $access->toArray() : [];
     }
 
+
+    /**
+     * Returns Employees without access level assigned
+     *
+     * @return array
+     */
     public function employeeWithoutAccess()
     {
         $employees = Employee::all();
         $result = [];
-        foreach ($employees as $employee)
-        {
+        foreach ($employees as $employee) {
             if ($employee->access()->count() == 0) {
                 $result[] = $employee->toArray();
             }
@@ -151,12 +159,16 @@ class AccessLevelService
         return $result;
     }
 
+    /**
+     * Returns Teams without access level assigned
+     *
+     * @return array
+     */
     public function teamWithoutAccess()
     {
         $teams = Team::all();
         $result = [];
-        foreach ($teams as $team)
-        {
+        foreach ($teams as $team) {
             if ($team->access()->count() == 0) {
                 $result[] = $team->toArray();
             }
@@ -165,12 +177,16 @@ class AccessLevelService
         return $result;
     }
 
+    /**
+     * Returns Folders without access level assigned
+     *
+     * @return array
+     */
     public function folderWithoutAccess()
     {
         $folders = Folder::all();
         $result = [];
-        foreach ($folders as $folder)
-        {
+        foreach ($folders as $folder) {
             if ($folder->access()->count() == 0) {
                 $result[] = $folder->toArray();
             }
@@ -179,12 +195,16 @@ class AccessLevelService
         return $result;
     }
 
+    /**
+     * Returns items without access level assigned
+     *
+     * @return array
+     */
     public function itemWithoutAccess()
     {
         $items = Item::all();
         $result = [];
-        foreach ($items as $item)
-        {
+        foreach ($items as $item) {
             if ($item->access()->count() == 0) {
                 $result[] = $item->toArray();
             }
