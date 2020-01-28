@@ -13,6 +13,10 @@
                             </div>
                             <div class="h5 mb-0 font-weight-bold text-gray-800" id="employeeAccess">N/A</div>
                         </div>
+                        <div class="col-auto inner-div">
+                            <button class="btn btn-danger" id="revokeAccess">Revoke Access</button>
+                        </div>
+                        &nbsp;&nbsp;
                         <div class="col-auto">
                             <i class="fas fa-lock fa-2x text-gray-300"></i>
                         </div>
@@ -29,6 +33,10 @@
                             </div>
                             <div class="h5 mb-0 font-weight-bold text-gray-800" id="employeeTeam">N/A</div>
                         </div>
+                        <div class="col-auto inner-div">
+                            <button class="btn btn-danger" id="removeFromTeam">Remove From Team</button>
+                        </div>
+                        &nbsp;&nbsp;
                         <div class="col-auto">
                             <i class="fas fa-users fa-2x text-gray-300"></i>
                         </div>
