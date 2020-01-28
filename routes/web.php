@@ -50,6 +50,7 @@ Route::group([
     Route::get('/items', 'EmployeeController@items')->name('employeeItems');
     Route::get('/access', 'EmployeeController@access')->name('employeeAccess');
     Route::get('/team', 'EmployeeController@team')->name('employeeTeam');
+    Route::get('/team/items', 'EmployeeController@teamItems')->name('employeeTeamItems');
 });
 
 Route::resource('access-level', 'AccessLevelController');
