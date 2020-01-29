@@ -43,7 +43,7 @@ class AccessLevelController extends Controller
     {
         $this->validate($request, [
             'name' => 'required|string',
-            'level' => 'required|number',
+            'level' => 'required|string',
         ]);
 
         return response()->json(
