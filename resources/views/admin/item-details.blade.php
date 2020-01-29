@@ -86,7 +86,7 @@
             $('#revokeAccess').click(function (e) {
                 var accessUuid = $('#itemAccessUuid').val();
                 var itemUuid = '{{ Request::route('itemUuid') }}';
-                var url = '/access/' + accessUuid + '/item/' + itemUuid + '/access';
+                var url = '/access/' + accessUuid + '/item/' + itemUuid + ';
                 /* start ajax submission process */
                 $.ajax({
                     url: url,

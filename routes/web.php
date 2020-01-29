@@ -12,7 +12,7 @@
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return redirect(route('frontEndEmployee'));
 });
 
 Route::resource('folder', 'FolderController');
@@ -87,7 +87,7 @@ Route::group([
         'prefix' => 'item/{itemUuid}'
     ], function () {
         Route::post('/', 'AccessItemController@store');
-        Route::delete('/access', 'AccessItemController@revokeItemAccess')->name('revokeItemAccess');
+        Route::delete('/', 'AccessItemController@revokeItemAccess')->name('revokeItemAccess');
     });
     Route::group([
         'prefix' => 'employee/{employeeUuid}'

@@ -29,7 +29,7 @@ class FolderController extends Controller
         return response()->json(
             [
                 'success' => true,
-                'message' => 'Folder stored successfully',
+                'message' => 'List of folder',
                 'data' => $this->folderService->folders()->toArray(),
             ]
         );

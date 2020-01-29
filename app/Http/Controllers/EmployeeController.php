@@ -114,7 +114,7 @@ class EmployeeController extends Controller
     }
 
     /**
-     * get the team of an empoyee
+     * get the team of an employee
      *
      * @param  string  $employeeUuid  Employee uuid
      *
