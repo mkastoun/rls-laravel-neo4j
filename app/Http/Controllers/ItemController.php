@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Services\AccessLevelService;
 use App\Http\Services\ItemService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -10,10 +11,12 @@ use Illuminate\Http\Response;
 class ItemController extends Controller
 {
     protected $itemService;
+    protected $accessLevelService;
 
-    public function __construct(ItemService $itemService)
+    public function __construct(ItemService $itemService, AccessLevelService $accessLevelService)
     {
         $this->itemService = $itemService;
+        $this->accessLevelService = $accessLevelService;
     }
 
     /**
@@ -62,9 +65,15 @@ class ItemController extends Controller
      *
      * @return Response
      */
-    public function show($id)
+    public function show(string $folderUuid, string $itemUuid)
     {
-        //
+        return response()->json(
+            [
+                'success' => true,
+                'message' => 'Item details',
+                'data' => $this->itemService->itemDetails($itemUuid),
+            ]
+        );
     }
 
     /**
@@ -90,5 +99,16 @@ class ItemController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    public function access(string $folderUuid, string $itemUuid)
+    {
+        return response()->json(
+            [
+                'success' => true,
+                'message' => 'Folder access information',
+                'data' => $this->accessLevelService->itemAccessLevel($itemUuid),
+            ]
+        );
     }
 }

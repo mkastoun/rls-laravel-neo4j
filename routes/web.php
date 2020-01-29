@@ -27,7 +27,9 @@ Route::group([
     'prefix' => 'folder/{folderUuid}/item'
 ], function () {
     Route::post('/', 'ItemController@store')->name('itemStore');
-    Route::get('/', 'ItemController@index')->name('itemStore');
+    Route::get('/', 'ItemController@index')->name('itemLists');
+    Route::get('/{itemUuid}', 'ItemController@show')->name('itemDetails');
+    Route::get('/{itemUuid}/access', 'ItemController@access')->name('itemAccess');
 });
 
 Route::resource('team', 'TeamController');
@@ -84,7 +86,8 @@ Route::group([
     Route::group([
         'prefix' => 'item/{itemUuid}'
     ], function () {
-        Route::resource('/', 'AccessItemController');
+        Route::post('/', 'AccessItemController@store');
+        Route::delete('/access', 'AccessItemController@revokeItemAccess')->name('revokeItemAccess');
     });
     Route::group([
         'prefix' => 'employee/{employeeUuid}'
@@ -103,6 +106,7 @@ Route::group([
     Route::get('/team/{teamUuid}/details', 'FrontEndController@teamDetails')->name('frontEndTeamDetails');
     Route::get('/folder', 'FrontEndController@folder')->name('frontEndFolder');
     Route::get('/folder/{folderUuid}/details', 'FrontEndController@folderDetails')->name('frontEndFolderDetails');
+    Route::get('/folder/{folderUuid}/item/{itemUuid}', 'FrontEndController@itemDetails')->name('frontEndItemDetails');
     Route::get('/access', 'FrontEndController@access')->name('frontEndAccess');
     Route::get('/access/{accessUuid}/details', 'FrontEndController@accessDetails')->name('frontEndAccessDetails');
 });

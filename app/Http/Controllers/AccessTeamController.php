@@ -31,11 +31,18 @@ class AccessTeamController extends Controller
      *
      * @param  Request  $request
      *
-     * @return Response
+     * @return JsonResponse
      */
     public function store(string $accessUuid, string $teamUuid)
     {
         $this->accessLevelService->assignAccessToTeam($accessUuid, $teamUuid);
+        return response()->json(
+            [
+                'success' => true,
+                'message' => 'Team Access assigned',
+                'data' => [],
+            ]
+        );
     }
 
     /**

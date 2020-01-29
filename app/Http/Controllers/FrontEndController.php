@@ -152,4 +152,9 @@ class FrontEndController extends Controller
     {
         return view('admin.access-details');
     }
+
+    public function itemDetails()
+    {
+        return view('admin.item-details');
+    }
 }

@@ -63,4 +63,10 @@ class ItemService
         $folderService = new FolderService();
         return $folderService->items($folderUuid);
     }
+
+    public function itemDetails($itemUuid)
+    {
+        $item = Item::query()->where('uuid', '=', $itemUuid)->first();
+        return (!empty($item)) ? $item->toArray() : [];
+    }
 }

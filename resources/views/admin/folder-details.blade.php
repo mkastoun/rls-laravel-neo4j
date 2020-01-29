@@ -173,6 +173,14 @@
                         "serverSide": true,
                         "paging": false,
                         "ajax": '{{ route('folderItems', ['folderUuid' => Request::route('folderUuid')]) }}',
+                        "columnDefs": [{
+                            "targets": 0,
+                            "render": function ( data, type, row, meta ) {
+                                var itemID = row['uuid'];
+                                console.log(row);
+                                return '<a href="/admin/folder/' + '{{ Request::route('folderUuid') }}' + '/item/'+ itemID +'">' + data + '</a>';
+                            }
+                        }],
                         "columns": [
                             {"data": "name"},
                             {"data": "description"},

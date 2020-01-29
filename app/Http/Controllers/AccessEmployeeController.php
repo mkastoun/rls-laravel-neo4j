@@ -37,6 +37,13 @@ class AccessEmployeeController extends Controller
     public function store(string $accessUuid, string $employeeUuid)
     {
         $this->accessLevelService->assignAccessToEmployee($accessUuid, $employeeUuid);
+        return response()->json(
+            [
+                'success' => true,
+                'message' => 'Employee Access assigned',
+                'data' => [],
+            ]
+        );
     }
 
     /**

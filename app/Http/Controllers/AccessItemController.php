@@ -31,11 +31,18 @@ class AccessItemController extends Controller
      *
      * @param  Request  $request
      *
-     * @return Response
+     * @return JsonResponse
      */
     public function store(string $accessUuid, string $itemUuid)
     {
         $this->accessLevelService->assignAccessToItem($accessUuid, $itemUuid);
+        return response()->json(
+            [
+                'success' => true,
+                'message' => 'Item Access assigned',
+                'data' => [],
+            ]
+        );
     }
 
     /**
@@ -87,6 +94,18 @@ class AccessItemController extends Controller
                 'success' => true,
                 'message' => 'items list without access',
                 'data' => $this->accessLevelService->itemWithoutAccess()
+            ]
+        );
+    }
+
+    public function revokeItemAccess(string $accessUuid, string $itemUuid)
+    {
+        $this->accessLevelService->revokeItemAccess($accessUuid, $itemUuid);
+        return response()->json(
+            [
+                'success' => true,
+                'message' => 'items access revoked',
+                'data' => []
             ]
         );
     }

@@ -119,6 +119,18 @@ class AccessLevelService
     }
 
     /**
+     * Get item access level
+     *
+     * @param  string  $teamUuid  Team uuid
+     *
+     * @return array
+     */
+    public function itemAccessLevel(string $teamUuid)
+    {
+        $team = Item::query()->where('uuid', '=', $teamUuid)->first();
+        return (!empty($team->access)) ? $team->access->toArray() : [];
+    }
+    /**
      * Function responsible return access level list
      *
      * @return Builder|Model
@@ -232,6 +244,13 @@ class AccessLevelService
         $folder = Folder::query()->where('uuid', '=', $folderUuid)->first();
         $access = AccessLevel::query()->where('uuid', '=', $accessUuid)->first();
         $folder->access()->detach($access);
+    }
+
+    public function revokeItemAccess(string $accessUuid, string $itemUuid)
+    {
+        $item = Item::query()->where('uuid', '=', $itemUuid)->first();
+        $access = AccessLevel::query()->where('uuid', '=', $accessUuid)->first();
+        $item->access()->detach($access);
     }
 
 }

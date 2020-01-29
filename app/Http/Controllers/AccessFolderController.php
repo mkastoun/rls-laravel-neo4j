@@ -36,6 +36,13 @@ class AccessFolderController extends Controller
     public function store(string $accessUuid, string $folderUuid)
     {
         $this->accessLevelService->assignAccessToFolder($accessUuid, $folderUuid);
+        return response()->json(
+            [
+                'success' => true,
+                'message' => 'Folder Access assigned',
+                'data' => [],
+            ]
+        );
     }
 
     /**
