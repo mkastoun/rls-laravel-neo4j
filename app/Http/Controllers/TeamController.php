@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Services\AccessLevelService;
 use App\Http\Services\TeamService;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
@@ -21,7 +22,7 @@ class TeamController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
     public function index()
     {
@@ -37,7 +38,7 @@ class TeamController extends Controller
      *
      * @param  Request  $request
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
     public function store(Request $request)
     {
@@ -58,7 +59,7 @@ class TeamController extends Controller
      *
      * @param  int  $id
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
     public function show(string $teamUuid)
     {
@@ -99,7 +100,7 @@ class TeamController extends Controller
      *
      * @param  string  $teamUuid  Team Uuid
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
     public function employees(string $teamUuid)
     {
@@ -115,7 +116,7 @@ class TeamController extends Controller
      *
      * @param  string  $teamUuid  Team Uuid
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
     public function folders(string $teamUuid)
     {
@@ -131,7 +132,7 @@ class TeamController extends Controller
      *
      * @param  string  $teamUuid  Team Uuid
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
     public function items(string $teamUuid)
     {
@@ -147,7 +148,7 @@ class TeamController extends Controller
      *
      * @param  string  $teamUuid  Team uuid
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
     public function access(string $teamUuid)
     {

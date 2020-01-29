@@ -93,7 +93,7 @@ class AccessItemController extends Controller
             [
                 'success' => true,
                 'message' => 'items list without access',
-                'data' => $this->accessLevelService->itemWithoutAccess()
+                'data' => $this->accessLevelService->itemWithoutAccess(),
             ]
         );
     }
@@ -105,7 +105,7 @@ class AccessItemController extends Controller
             [
                 'success' => true,
                 'message' => 'items access revoked',
-                'data' => []
+                'data' => [],
             ]
         );
     }

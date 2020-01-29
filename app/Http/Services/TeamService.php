@@ -129,6 +129,12 @@ class TeamService
         }
     }
 
+    /**
+     * Remove an Employee to a team
+     *
+     * @param  string  $teamUuid
+     * @param  string  $employeeUuid
+     */
     public function unassignEmployee(string $teamUuid, string $employeeUuid)
     {
         $employee = Employee::query()->where('uuid', '=', $employeeUuid)->first();
@@ -136,6 +142,12 @@ class TeamService
         $team->employees()->detach($employee);
     }
 
+    /**
+     * Add an orphan employee to the team
+     *
+     * @param  string  $teamUuid
+     * @param  string  $employeeUuid
+     */
     public function assignEmployeeToTeam(string $teamUuid, string $employeeUuid)
     {
         $employeeService = new EmployeeService();

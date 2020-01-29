@@ -33,7 +33,7 @@ Route::group([
 });
 
 Route::resource('team', 'TeamController');
-Route::post('employee/orphan', 'EmployeeController@storeOrphanEmployee');
+Route::post('employee/orphan', 'EmployeeController@storeOrphanEmployee')->name('orphanEmployeeStore');
 Route::get('employee/orphan', 'EmployeeController@getOrphanEmployee')->name('orphanEmployeeList');
 
 Route::group([

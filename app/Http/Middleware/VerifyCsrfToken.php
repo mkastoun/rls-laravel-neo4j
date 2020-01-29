@@ -22,5 +22,6 @@ class VerifyCsrfToken extends Middleware
         'access/*/item/*',
         'access/*/folder/*',
         'access/*/team/*',
+        'employee/orphan'
     ];
 }

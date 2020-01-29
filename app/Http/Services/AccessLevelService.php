@@ -130,6 +130,7 @@ class AccessLevelService
         $team = Item::query()->where('uuid', '=', $teamUuid)->first();
         return (!empty($team->access)) ? $team->access->toArray() : [];
     }
+
     /**
      * Function responsible return access level list
      *
@@ -225,6 +226,12 @@ class AccessLevelService
         return $result;
     }
 
+    /**
+     * Revoke access from employee
+     *
+     * @param  string  $accessUuid    Access Uuid
+     * @param  string  $employeeUuid  Employee Uuid
+     */
     public function revokeEmployeeAccess(string $accessUuid, string $employeeUuid)
     {
         $employee = Employee::query()->where('uuid', '=', $employeeUuid)->first();
@@ -232,6 +239,12 @@ class AccessLevelService
         $employee->access()->detach($access);
     }
 
+    /**
+     * Revoke access from team
+     *
+     * @param  string  $accessUuid  Access Uuid
+     * @param  string  $teamUuid    Team Uuid
+     */
     public function revokeTeamAccess(string $accessUuid, string $teamUuid)
     {
         $team = Team::query()->where('uuid', '=', $teamUuid)->first();
@@ -239,6 +252,12 @@ class AccessLevelService
         $team->access()->detach($access);
     }
 
+    /**
+     * Revoke access from folder
+     *
+     * @param  string  $accessUuid  Access Uuid
+     * @param  string  $folderUuid  Folder Uuid
+     */
     public function revokeFolderAccess(string $accessUuid, string $folderUuid)
     {
         $folder = Folder::query()->where('uuid', '=', $folderUuid)->first();
@@ -246,6 +265,12 @@ class AccessLevelService
         $folder->access()->detach($access);
     }
 
+    /**
+     * Revoke access from item
+     *
+     * @param  string  $accessUuid  Access Uuid
+     * @param  string  $itemUuid    Item Uuid
+     */
     public function revokeItemAccess(string $accessUuid, string $itemUuid)
     {
         $item = Item::query()->where('uuid', '=', $itemUuid)->first();

@@ -32,6 +32,7 @@ class EmployeeService
         $employee = Employee::query()->where('uuid', '=', $employeeUuid)->first();
         return $employee->toArray();
     }
+
     /**
      * Function responsible to create an employee
      *

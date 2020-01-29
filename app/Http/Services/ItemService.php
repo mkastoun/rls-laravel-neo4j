@@ -64,6 +64,13 @@ class ItemService
         return $folderService->items($folderUuid);
     }
 
+    /**
+     * Get Item details
+     *
+     * @param $itemUuid  Item Uuid
+     *
+     * @return array
+     */
     public function itemDetails($itemUuid)
     {
         $item = Item::query()->where('uuid', '=', $itemUuid)->first();

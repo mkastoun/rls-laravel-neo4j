@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Vinelab\NeoEloquent\Eloquent\Model as NeoEloquent;
 use Vinelab\NeoEloquent\Eloquent\SoftDeletes;
 
@@ -28,12 +29,12 @@ class Folder extends NeoEloquent
      *
      * @var array
      */
-    protected $fillable = ['uuid','name', 'description'];
+    protected $fillable = ['uuid', 'name', 'description'];
 
     /**
      * Team that the employee belongs to
      *
-     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     * @return HasOne
      */
     public function items()
     {

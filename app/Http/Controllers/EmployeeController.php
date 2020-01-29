@@ -100,6 +100,11 @@ class EmployeeController extends Controller
      */
     public function storeOrphanEmployee(Request $request)
     {
+        $this->validate($request, [
+            'name' => 'required|string',
+            'email' => 'required|string',
+        ]);
+
         return response()->json(
             [
                 'success' => true,
@@ -192,7 +197,7 @@ class EmployeeController extends Controller
                 'data' => $this->employeeService->teamEmployeeItems($employeeUuid),
             ]);
     }
-    
+
     /**
      * Get Employee accessible folders through team access level
      *

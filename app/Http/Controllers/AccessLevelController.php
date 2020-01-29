@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Http\Services\AccessLevelService;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 
 class AccessLevelController extends Controller
 {
@@ -17,7 +19,7 @@ class AccessLevelController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
     public function index()
     {
@@ -25,7 +27,7 @@ class AccessLevelController extends Controller
             [
                 'success' => true,
                 'message' => 'Access level list',
-                'data' => $this->accessLevelService->access()
+                'data' => $this->accessLevelService->access(),
             ]
         );
     }
@@ -33,9 +35,9 @@ class AccessLevelController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  Request  $request
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
     public function store(Request $request)
     {
@@ -48,7 +50,7 @@ class AccessLevelController extends Controller
             [
                 'success' => true,
                 'message' => 'Access level created successfully',
-                'data' => $this->accessLevelService->createAccessLevel($request->all())->toArray()
+                'data' => $this->accessLevelService->createAccessLevel($request->all())->toArray(),
             ]
         );
     }
@@ -58,7 +60,7 @@ class AccessLevelController extends Controller
      *
      * @param  int  $id
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
     public function show(string $accessUuid)
     {
@@ -66,7 +68,7 @@ class AccessLevelController extends Controller
             [
                 'success' => true,
                 'message' => 'Access level details',
-                'data' => $this->accessLevelService->accessDetails($accessUuid)
+                'data' => $this->accessLevelService->accessDetails($accessUuid),
             ]
         );
     }
@@ -74,9 +76,10 @@ class AccessLevelController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @param  Request  $request
+     * @param  int      $id
+     *
+     * @return Response
      */
     public function update(Request $request, $id)
     {
@@ -87,7 +90,8 @@ class AccessLevelController extends Controller
      * Remove the specified resource from storage.
      *
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     *
+     * @return Response
      */
     public function destroy($id)
     {
