@@ -1,15 +1,22 @@
 # RLS
 
-RLS it's web app, stands for row level security, it's responsible to manage item and folder that an employee can access based on the employee access level, employee's team access level , Folder access level and item access level.
+RLS it's a web app, stands for row-level security, it's responsible to manage item and folder that an employee can access based on the employee access level, employee's team access level, Folder access level, and item access level.
 ## Build with:
   - Laravel
   - neo4j
+### Why Graph DB (neo4j)
+* Flexibility
+  * With graph databases, IT and data architect teams move at the speed of business 
+   because the structure and schema of a graph model flexes as applications and industries change.
+* Data Connection
+  * Graph databases are the best solution for handling connected data
 
 ### Prerequisite
-On your machine you should have the following intsalled
-* docker
-* composer
-* php 7+
+On your machine, you should have the following installed:
+
+  * docker
+  * composer
+  * PHP 7+
 
 
 # Installation
@@ -45,16 +52,16 @@ PASSWORD
 ```
 
 ### RLS UI
-RLS commes with a UI to facilitat the Item management To check the UI
+RLS comes with a UI to facilitate the Item management To check the UI
 GO TO
 ```sh
 http://localhost:8014
 ```
 ## APIs
 #### FOLDERS
-- form parameter required
--- name
--- description
+- required form parameter
+ * name
+ * description
 
 Get all folders
 ```sh
@@ -85,9 +92,9 @@ Method GET
 #### ITEMS
 An item should always be in a folder
 
-- form parameter required
--- name
--- description
+- required form parameter
+ * name
+ * description
 
 Store Item
 ```sh
@@ -115,8 +122,9 @@ Method GET
 
 ### TEAM
 
-- form parameter required
--- name
+- required form parameter
+ * name
+
 
 Store Team
 ```sh
@@ -135,7 +143,7 @@ Method GET
 /team/{teamUuid}
 ```
 
-Create employee and assign it to the team
+Create the employee and assign it to the team
 ```sh
 Method POST
 /team/{teamUuid}/employee
@@ -177,16 +185,16 @@ Method DELETE
 ### ORPHAN EMPLOYEE
 An employee without a team
 
-- form parameter required
--- name
--- email
+- required form parameter
+ * name
+ * email
 
-Create employee without a team
+Create an employee without a team
 ```sh
 Method POST
 employee/orphan
 ```
-Get list of orphan Employees
+Get the list of orphan Employees
 ```sh
 Method GET
 employee/orphan
@@ -194,9 +202,9 @@ employee/orphan
 
 ### EMPLOYEE
 
-- form parameter required
--- name
--- email
+- required form parameter
+ * name
+ * email
 
 Get employee details
 ```sh
@@ -239,16 +247,16 @@ employee/{employeeUuid}/team/folder
 ```
 ### ACCESS LEVEL
 
-- form parameter required
--- name
--- level
+- required form parameter
+ * name
+ * level
 
 Store access level
 ```sh
 Method POST
 /access-level
 ```
-Get list of access levels
+Get the list of access levels
 ```sh
 Method GET
 /access-level
@@ -323,5 +331,4 @@ RLS is currently using the following dependencies
 | package | README |
 | ------ | ------ |
 | NeoEloquent | https://github.com/Vinelab/NeoEloquent/blob/1.4/README.md |
-NeoEloquent its an OGM
-
+NeoEloquent its an OGM to connect with the Graph database
