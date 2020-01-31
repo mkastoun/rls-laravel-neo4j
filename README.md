@@ -23,7 +23,7 @@ On your machine, you should have the following installed:
 
 RLS requires composer and docker to be installed on your machine
 
- ```sh
+```sh
 $ git clone the project
 $ cd to/the/project/folder
 $ composer isntall
